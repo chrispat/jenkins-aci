@@ -1,0 +1,17 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "storageaccountname": {
+        "value": "jenkinshome13717"
+      },
+     "storageaccountkey": {
+        "reference": {
+          "keyVault": {
+            "id": "/subscriptions/5e3ac05d-ce31-43c1-b554-755bb09588db/resourceGroups/chrispat-jenkins-aci/providers/Microsoft.KeyVault/vaults/jenkins-aci-keyvault"
+          },
+          "secretName": "jenkinshomestoragekey"
+        }
+      }
+    }
+  }
