@@ -45,4 +45,6 @@ az keyvault show --name $KEYVAULT_NAME --query [id] -o tsv
 # deploy the resource group
 az group deployment create --name $USER-jenkins-aci-deployment --template-file jenkins-aci-template.json --parameters jenkins-aci-parameters.json --resource-group $ACI_PERS_RESOURCE_GROUP
 
+az container logs --resource-group $ACI_PERS_RESOURCE_GROUP --name jenkins-ci --container-name jenkins-ci
+
 ```
