@@ -1,0 +1,50 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "resources": [
+        {
+            "name": "jenkins-ci",
+            "type": "Microsoft.ContainerInstance/containerGroups",
+            "apiVersion": "2017-10-01-preview",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "containers": [
+                    {
+                        "name": "jenkins",
+                        "properties": {
+                            "image": "jenkins/jenkins:lts",
+                            "resources": {
+                                "requests": {
+                                    "cpu": 2,
+                                    "memoryInGb": 4
+                                }
+                            },
+                            "ports": [
+                                {
+                                    "port": 8080
+                                },
+                                {
+                                    "port": 50000
+                                }
+                            ]
+                        }
+                    }
+                ],
+                "osType": "Linux",
+                "ipAddress": {
+                    "type": "Public",
+                    "ports": [
+                        {
+                            "protocol": "tcp",
+                            "port": "8080"
+                        },
+                        {
+                            "protocol": "tcp",
+                            "port": "50000"
+                        }
+                    ]
+                }
+            }
+        }
+    ]
+}

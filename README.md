@@ -1,8 +1,12 @@
 # Mounting volumes in container instance
+
 https://docs.microsoft.com/en-us/azure/container-instances/container-instances-mounting-azure-files-volume
 http://unethicalblogger.com/2017/07/31/jenkins-azure-container-instances.html
 
-### Create a storage acount and file share
+## Create all of the resources and deploy the container group with persistent home.
+
+Currently this does not seem to work due to an error in setting the initialAdminPassword
+
 ```sh
 # Change these four parameters
 ACI_PERS_STORAGE_ACCOUNT_NAME=jenkinshome$RANDOM
@@ -46,5 +50,25 @@ az keyvault show --name $KEYVAULT_NAME --query [id] -o tsv
 az group deployment create --name $USER-jenkins-aci-deployment --template-file jenkins-aci-template.json --parameters jenkins-aci-parameters.json --resource-group $ACI_PERS_RESOURCE_GROUP
 
 az container logs --resource-group $ACI_PERS_RESOURCE_GROUP --name jenkins-ci --container-name jenkins-ci
+
+```
+
+## Create the resources and deploy the container group without persistent home
+
+```sh
+# Change these four parameters
+ACI_PERS_RESOURCE_GROUP=$USER-jenkins-aci
+ACI_PERS_LOCATION=eastus
+
+# Create the resource group
+az group create --name $ACI_PERS_RESOURCE_GROUP --location $ACI_PERS_LOCATION
+
+# deploy the resource group
+az group deployment create --name $USER-jenkins-aci-deployment --template-file jenkins-aci-template-no-storage.json --resource-group $ACI_PERS_RESOURCE_GROUP
+
+# read the logs to get the initial admin password
+az container logs --resource-group $ACI_PERS_RESOURCE_GROUP --name jenkins --container-name jenkins-ci
+
+az container delete --resource-group $ACI_PERS_RESOURCE_GROUP --name jenkins-ci
 
 ```
